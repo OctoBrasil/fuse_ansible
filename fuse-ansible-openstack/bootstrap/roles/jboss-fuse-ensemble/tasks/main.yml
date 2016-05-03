@@ -1,0 +1,24 @@
+- name: Copy over JBoss Fuse 6.1
+  copy: src=fuse-6.1.zip dest=/opt/jboss-fuse-6.1.zip
+  
+- name: Extract the archive
+  command: chdir=/opt creates=/opt/fuse-6.1 /usr/bin/unzip jboss-fuse-6.1.zip -d fuse-6.1
+
+- name: Create symbolic link
+  command: chdir=/opt creates=/opt/fuse /bin/ln -snf fuse-6.1/jboss-fuse-6.1.0.redhat-379 fuse
+
+- name: Add group fuse
+  group: name=fuse state=present
+
+- name: Add user fuse
+  user: name=fuse group=fuse home=/home/fuse
+
+- name: Change ownership of fuse installation
+  file: path=/opt/fuse-6.1 owner=fuse group=fuse state=directory recurse=yes
+
+- name: Create directories for keys
+  command: chdir=/opt /bin/mkdir keys
+
+- name: Install private key for accessing other nodes in the cluster
+  copy: src=redhat.pem dest=/opt/keys/redhat.pem group=fuse owner=fuse
+

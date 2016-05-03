@@ -1,0 +1,28 @@
+---
+# This playbook preps a set of servers for JBoss Fuse 
+# and installs fuse on the ensemble servers
+#
+#
+
+- name: apply common configs to all nodes
+  hosts: all
+  sudo: yes
+  remote_user: vagrant
+
+  roles:
+    - jboss-fuse-common
+
+- name: provision fuse onto ensemble servers
+  hosts: all
+  sudo: yes
+  remote_user: vagrant
+ 
+  roles:
+    - jboss-fuse-ensemble
+
+#- name: provision broker machines
+#  hosts: brokers
+#  user: cloud-user
+#
+#  roles:
+#    - jboss-fuse-brokers
